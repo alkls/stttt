@@ -1,338 +1,668 @@
-<!DOCTYPE html>
+
+			 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أسعار التنشيط - سداد الفواتير</title>
+    <title>باقات استارلينك - GreenPay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/droidarabickufi.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* الأنماط السابقة تبقى كما هي */
+        :root {
+            --primary-color: #159148;
+            --secondary-color: #0dc152;
+            --accent-color: #d9534f;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Droid Arabic Kufi', sans-serif;
+            background-color: #f5f5f5;
             color: #333;
+            padding-top: 20px;
+            padding-bottom: 50px;
         }
-        
-        .container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 850px;
-            overflow: hidden;
-            position: relative;
-        }
-        
+
         .header {
-            background: linear-gradient(135deg, #3498db 0%, #1a5276 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 25px;
-            text-align: center;
-            position: relative;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #3498db, #e74c3c, #3498db);
-        }
-        
+
         .exchange-rate {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
+            background-color: white;
+            border-radius: 12px;
             padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             text-align: center;
-            font-size: 20px;
+            border-right: 4px solid var(--primary-color);
+        }
+
+        /* تصميم الموبايل */
+        .mobile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
-        
-        .exchange-rate i {
-            font-size: 24px;
-            animation: pulse 2s infinite;
+
+        .mobile-price-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+
+        .mobile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
         }
-        
-        .note {
-            background-color: #f8f9fa;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #e9ecef;
-            color: #6c757d;
-            font-size: 16px;
-        }
-        
-        .table-container {
-            overflow-x: auto;
-            padding: 5px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-        
-        th, td {
-            padding: 16px;
-            text-align: center;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        th {
-            background-color: #2c3e50;
+
+        .btn-select {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
-        
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
+
+        .btn-select:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
-        
-        tr:hover {
-            background-color: #e9ecef;
-            transition: background-color 0.3s;
-        }
-        
-        .country {
+
+        .section-title {
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #2c3e50;
-            text-align: right;
+            margin: 20px 0 15px;
+            color: var(--primary-color);
+            border-right: 4px solid var(--primary-color);
+            padding-right: 10px;
         }
-        
-        .pound {
-            color: #27ae60;
-            font-weight: 600;
+
+        .package-name {
+            font-weight: bold;
+            color: var(--dark-text);
         }
-        
-        .dollar {
-            color: #3498db;
-            font-weight: 600;
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
         }
-        
-        .bill {
+
+        .discount-badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        .discount-amount {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .final-price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .price-sdg {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .speed-info {
+            font-size: 0.85rem;
             color: #7f8c8d;
         }
+
+        .new-activation {
+            color: #27ae60;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .promo-active {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(217, 83, 79, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(217, 83, 79, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(217, 83, 79, 0);
+            }
+        }
         
-        .footer {
-            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-            color: white;
+        .why-us {
+            background: white;
+            border-radius: 12px;
             padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .why-us-header {
             text-align: center;
-            position: relative;
+            margin-bottom: 20px;
+            color: var(--primary-color);
         }
         
-        .contact {
-            font-size: 18px;
-            letter-spacing: 1px;
-            margin-top: 10px;
+        .benefit-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 15px;
         }
         
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            background-color: #25D366;
+        .benefit-icon {
+            background: var(--primary-color);
             color: white;
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            text-decoration: none;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            justify-content: center;
+            margin-left: 15px;
+            flex-shrink: 0;
         }
         
-        .whatsapp-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+        .benefit-text {
+            flex: 1;
         }
-        
-        .whatsapp-btn i {
-            font-size: 32px;
+
+        .fee-discount-notice {
+            font-size: 0.8rem;
+            color: #27ae60;
+            margin-top: 5px;
         }
-        
-        @media (max-width: 768px) {
-            th, td {
-                padding: 12px 8px;
-                font-size: 14px;
-            }
-            
-            .header h1 {
-                font-size: 22px;
-            }
-            
-            .exchange-rate {
-                font-size: 16px;
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .whatsapp-btn {
-                width: 55px;
-                height: 55px;
-                bottom: 20px;
-                left: 20px;
-            }
-            
-            .whatsapp-btn i {
-                font-size: 28px;
-            }
-        }
+		
+		/* عداد التنازل */
+.countdown-timer {
+    border-radius: 12px;
+    border-right: 5px solid #17a2b8;
+    animation: pulse 2s infinite;
+}
+
+.countdown-item {
+    background: rgba(23, 162, 184, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 70px;
+}
+
+.countdown-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #17a2b8;
+    display: block;
+}
+
+.countdown-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(23, 162, 184, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(23, 162, 184, 0);
+    }
+}
+		
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="header">
-            <h1>أسعار التنشيط (سداد الفواتير)</h1>
+        <!-- العنوان الرئيسي -->
+        <div class="header text-center">
+            <h1><i class="fas fa-satellite"></i> باقات استارلينك</h1>
+            <p class="mb-0">اختر الباقة المناسبة واحصل على أفضل الأسعار</p>
         </div>
-        
+
+        <!-- سعر الصرف -->
         <div class="exchange-rate">
-            <i class="fas fa-dollar-sign"></i>
-            <span>سعر صرف الدولار اليوم: 1 دولار = 3,600 جنيه سوداني</span>
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <!--h4 class="mb-1">سعر الصرف الحالي: <span class="text-danger">1$ = 3600 SDG</span></h4-->
+                    <p class="mb-0 text-muted">آخر تحديث: الان</p>
+                </div>
+                <div class="col-md-4 text-start">
+                    <span class="badge bg-success fs-6">
+                        ▼ انخفاض                    </span>
+                </div>
+            </div>
         </div>
-        
-        <div class="note">
-            ملحوظة: الأسعار تنفذ حسب سعر الصرف لليوم
+
+        <!-- حالة العروض -->
+                <div class="alert alert-success promo-active">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-gift fa-2x me-3"></i>
+                <div>
+                    <h5 class="mb-1">عروض خاصة حصرية 🔥</h5>
+                    <p class="mb-0" style="margin-right: 10px;">استفد من عروضنا الترويجية المميزة على باقات استارلينك</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>الدولة</th>
-                        <th>الفاتورة</th>
-                        <th>بالجنيه</th>
-                        <th>بالدولار</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="country">اليمن</td>
-                        <td class="bill">100$</td>
-                        <td class="pound">385.000 SDG</td>
-                        <td class="dollar">107</td>
-                    </tr>
-                    <tr>
-                        <td class="country">نيجيري</td>
-                        <td class="bill">49,000 NGN</td>
-                        <td class="pound">140.000 SDG</td>
-                        <td class="dollar">39</td>
-                    </tr>
-                    <tr>
-                        <td class="country">أوربي</td>
-                        <td class="bill">89€</td>
-                        <td class="pound">403.000 SDG</td>
-                        <td class="dollar">112</td>
-                    </tr>
-                    <tr>
-                        <td class="country">ملاوي</td>
-                        <td class="bill">170,000 MKW</td>
-                        <td class="pound">388.000 SDG</td>
-                        <td class="dollar">108</td>
-                    </tr>
-                    <tr>
-                        <td class="country">رواندا</td>
-                        <td class="bill">128,000 RWF</td>
-                        <td class="pound">345.000 SDG</td>
-                        <td class="dollar">96</td>
-                    </tr>
-                    <tr>
-                        <td class="country">زامبيا</td>
-                        <td class="bill">2,500 ZMW</td>
-                        <td class="pound">414.000 SDG</td>
-                        <td class="dollar">115</td>
-                    </tr>
-                    <tr>
-                        <td class="country">فرنسا</td>
-                        <td class="bill">72€</td>
-                        <td class="pound">327.000 SDG</td>
-                        <td class="dollar">91</td>
-                    </tr>
-                    <tr>
-                        <td class="country">ياباني</td>
-                        <td class="bill">14400¥</td>
-                        <td class="pound">355.000 SDG</td>
-                        <td class="dollar">105</td>
-                    </tr>
-                    <tr>
-                        <td class="country">فلبيني</td>
-                        <td class="bill">5700</td>
-                        <td class="pound">378.000 SDG</td>
-                        <td class="dollar">105</td>
-                    </tr>
-                    <tr>
-                        <td class="country">جهاز جديد</td>
-                        <td class="bill"></td>
-                        <td class="pound">300.000 SDG</td>
-                        <td class="dollar"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="footer">
-            <div class="contact">
-                <i class="fas fa-phone"></i>
-                <span>249115033393</span>
+		
+		<!-- عداد الوقت المتبقي للعرض -->
+<div class="alert alert-info countdown-timer">
+    <div class="d-flex align-items-center">
+        <i class="fas fa-clock fa-2x me-3"></i>
+        <div>
+            <h5 class="mb-1">الوقت المتبقي لنهاية العرض ⏳</h5>
+            <div class="countdown-container d-flex justify-content-start mt-2">
+                <div class="countdown-item text-center me-3">
+                    <span class="countdown-value days">00</span>
+                    <span class="countdown-label">أيام</span>
+                </div>
+                <div class="countdown-item text-center me-3">
+                    <span class="countdown-value hours">00</span>
+                    <span class="countdown-label">ساعات</span>
+                </div>
+                <div class="countdown-item text-center me-3">
+                    <span class="countdown-value minutes">00</span>
+                    <span class="countdown-label">دقائق</span>
+                </div>
+                <div class="countdown-item text-center">
+                    <span class="countdown-value seconds">00</span>
+                    <span class="countdown-label">ثواني</span>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- زر التواصل عبر واتساب -->
-    <a href="https://wa.me/249115033393" class="whatsapp-btn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <script>
-        // تحديث سعر الصرف تلقائياً كل 10 ثوانٍ (لمحاكاة التغير في السعر)
-        function updateExchangeRate() {
-            const baseRate = 3608;
-            const randomChange = (Math.random() * 10 - 5).toFixed(2);
-            const newRate = (baseRate + parseFloat(randomChange)).toFixed(2);
-            
-            document.querySelector('.exchange-rate span').textContent = 
-                `سعر صرف الدولار اليوم: 1 دولار = ${newRate} جنيه سوداني`;
-        }
+</div>
+		
+		
         
-        // تحديث سعر الصرف كل 10 ثوانٍ
-        setInterval(updateExchangeRate, 10000);
-    </script>
-</body>
+        <!-- عرض الموبايل -->
+       <div class="d-md">
+    <h4 class="section-title">الباقات المتاحة</h4>
+    
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">نيجيريا روم اقل</h5>
+            <span class="final-price">
+                NGN 49,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 43-150 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">162,000 جنيه</span>
+            <span class="discount-amount">-11,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 30.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 7.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                151,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D9%86%D9%8A%D8%AC%D9%8A%D8%B1%D9%8A%D8%A7+%D8%B1%D9%88%D9%85+%D8%A7%D9%82%D9%84" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">نيجيريا عالمي</h5>
+            <span class="final-price">
+                NGN 167,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 43-150 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">449,000 جنيه</span>
+            <span class="discount-amount">-22,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 60.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 4.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                428,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D9%86%D9%8A%D8%AC%D9%8A%D8%B1%D9%8A%D8%A7+%D8%B9%D8%A7%D9%84%D9%85%D9%8A" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">ملاوي روم</h5>
+            <span class="final-price">
+                MWK 170,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 46-119 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">457,000 جنيه</span>
+            <span class="discount-amount">-22,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 60.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 4.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                436,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D9%85%D9%84%D8%A7%D9%88%D9%8A+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">زامبيا روم</h5>
+            <span class="final-price">
+                ZMW 2,500            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 46-119 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">457,000 جنيه</span>
+            <span class="discount-amount">-22,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 60.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 4.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                435,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D8%B2%D8%A7%D9%85%D8%A8%D9%8A%D8%A7+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">رواندا روم</h5>
+            <span class="final-price">
+                RWF 128,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 72-153 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">410,000 جنيه</span>
+            <span class="discount-amount">-11,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 30.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 7.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                400,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D8%B1%D9%88%D8%A7%D9%86%D8%AF%D8%A7+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">كينيا روم</h5>
+            <span class="final-price">
+                KES 14,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 50-128 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">446,000 جنيه</span>
+            <span class="discount-amount">-22,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 60.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 4.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                425,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D9%83%D9%8A%D9%86%D9%8A%D8%A7+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">موزانبيق روم</h5>
+            <span class="final-price">
+                MZN 6,000            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 58-132 Mbps</div>
+        
+                
+                <div class="mobile-price-details">
+            <span class="original-price">403,000 جنيه</span>
+            <span class="discount-amount">-22,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 60.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 4.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                382,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D9%85%D9%88%D8%B2%D8%A7%D9%86%D8%A8%D9%8A%D9%82+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">اليمن روم</h5>
+            <span class="final-price">
+                USD 100            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 43-150 Mbps</div>
+        
+                <div class="new-activation">مسموح للتنشيط الجديد</div>
+                
+                <div class="mobile-price-details">
+            <span class="original-price">403,000 جنيه</span>
+            <span class="discount-amount">-11,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 30.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 7.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                392,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D8%A7%D9%84%D9%8A%D9%85%D9%86+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+        
+    <div class="mobile-card">
+        <div class="mobile-header">
+            <h5 class="package-name mb-0">الاوربي باقة روم</h5>
+            <span class="final-price">
+                Euro 89            </span>
+        </div>
+        <div class="speed-info mb-2">سرعة: 72-153 Mbps</div>
+        
+                <div class="new-activation">مسموح للتنشيط الجديد</div>
+                
+                <div class="mobile-price-details">
+            <span class="original-price">432,000 جنيه</span>
+            <span class="discount-amount">-11,000 جنيه</span>
+        </div>
+        <div class="discount-badge d-inline-block mb-2">خصم 30.00% على العمولة</div>
+        <div class="fee-discount-notice">العمولة: 10$ ← 7.00$</div>
+                
+        <div class="mobile-footer">
+            <span class="price-sdg">
+                421,000 جنيه            </span>
+            <a href="https://api.whatsapp.com/send?phone=66823709054&text=أريد%20شراء%20باقة%20%D8%A7%D9%84%D8%A7%D9%88%D8%B1%D8%A8%D9%8A+%D8%A8%D8%A7%D9%82%D8%A9+%D8%B1%D9%88%D9%85" class="btn btn-select">اختر الباقة</a>
+        </div>
+    </div>
+
+    </div>
+        <!-- قسم لماذا تايلندي اسمر -->
+        <div class="why-us">
+            <h3 class="why-us-header">لماذا تايلندي اسمر؟</h3>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="benefit-text">
+                    <h5>دعم فني متواصل</h5>
+                    <p class="mb-0">نحن نوفر دعمًا فنيًا على مدار الساعة طوال أيام الأسبوع لحل أي مشكلة تواجهك</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="benefit-text">
+                    <h5>سرعة في التنفيذ</h5>
+                    <p class="mb-0">نقوم بتنفيذ طلباتك في أسرع وقت ممكن مع الحفاظ على الجودة</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="benefit-text">
+                    <h5>أمان وموثوقية</h5>
+                    <p class="mb-0">حساباتك ومعلوماتك محمية بأعلى معايير الأمان</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="benefit-text">
+                    <h5>أسعار تنافسية</h5>
+                    <p class="mb-0">نوفر لك أفضل الأسعار في السوق مع عروض خاصة دائمة</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="benefit-text">
+                    <h5>تجربة فريدة</h5>
+                    <p class="mb-0">أكثر من 1450 جهاز تم تجديده أو تنشيطه عبر خدماتنا</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ملاحظة -->
+        <div class="alert alert-info">
+            <div class="d-flex">
+                <i class="fas fa-info-circle fa-2x me-3"></i>
+                <div>
+                    <h5>ملاحظة مهمة</h5>
+                    <p class="mb-0">يوجد خصم إضافي عند تجديد 3 أجهزة أو أكثر في نفس الوقت. للاستفسار اتصل بنا على الواتساب.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- زر الاتصال -->
+        <div class="fixed-bottom p-3">
+            <div class="d-flex justify-content-center">
+                <a href="https://api.whatsapp.com/send?phone=66823709054" class="btn btn-success btn-lg rounded-pill shadow">
+                    <i class="fab fa-whatsapp me-2"></i> اتصل بنا على الواتساب
+                </a>
+            </div>
+        </div>
+    </div>
+	
+	<script type="2f45ad77171df6d7e7f8b433-text/javascript">
+// دالة حساب الوقت المتبقي
+function updateCountdown() {
+    // تاريخ انتهاء العرض (استبدل هذا بالقيمة الفعلية من PHP)
+    const promoEndDate = '2025-09-09'; // التنسيق: YYYY-MM-DD
+    const promoEnd = new Date(promoEndDate + 'T23:59:59'); // نضيف وقت نهاية اليوم
+    
+    // الوقت الحالي
+    const now = new Date();
+    
+    // الفرق بين الوقتين (بالميلي ثانية)
+    const difference = promoEnd - now;
+    
+    // إذا انتهى العرض
+    if (difference <= 0) {
+        document.querySelector('.countdown-timer').innerHTML = `
+            <div class="text-center">
+                <h5 class="mb-0">انتهى العرض الترويجي</h5>
+            </div>
+        `;
+        return;
+    }
+    
+    // حساب الأيام، الساعات، الدقائق والثواني المتبقية
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+    // تحديث القيم في الواجهة
+    document.querySelector('.days').textContent = days.toString().padStart(2, '0');
+    document.querySelector('.hours').textContent = hours.toString().padStart(2, '0');
+    document.querySelector('.minutes').textContent = minutes.toString().padStart(2, '0');
+    document.querySelector('.seconds').textContent = seconds.toString().padStart(2, '0');
+}
+
+// تحديث العداد كل ثانية
+setInterval(updateCountdown, 1000);
+
+// تشغيل العداد فور تحميل الصفحة
+updateCountdown();
+</script>
+	
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" type="2f45ad77171df6d7e7f8b433-text/javascript"></script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="2f45ad77171df6d7e7f8b433-|49" defer></script></body>
+
 </html>
